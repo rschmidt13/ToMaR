@@ -86,22 +86,7 @@ public class HDFSFiler extends Filer {
     public void localize() throws IOException {
         File fileRef = new File(getAbsoluteFileRef());
         LOG.debug("localize " + fileRef);
-        if(fileRef.getParentFile().exists()) {
-        	LOG.debug("local dir already existing: "+fileRef.getParent());
-        }
-        if (!fileRef.getParentFile().exists() && !new File(fileRef.getParent()).mkdirs()) {
-            LOG.warn("Co            fileRef = new File(getAbsoluteFileRef());
-            if (!new File(fileRef.getParent()).mkdirs()) {
-            	throw new IOException("Could not create local directory: " + fileRef.getParent() );
-            } else {
-            	LOG.info("Create local directory worked on second attempt");
-            }
-        } else {
-        	LOG.error("Was able to create local directory: " + fileRef.getParent());
-            LOG.error("java.io.tmpdir = "+System.getProperty("java.io.tmpdir"));
-            LOG.error("this.dir = "+this.dir);
-            LOG.error("hadoop.tmp.dir = "+System.getProperty("hadoop.tmp.dir"));
-uld not create local directory: " + fileRef.getParent() );
+        if (!new File(fileRef.getParent()).mkdirs()) {
             throw new IOException("Could not create local directory: " + fileRef.getParent() );
         }
         Path localfile = new Path( fileRef.toString() );
@@ -129,18 +114,7 @@ uld not create local directory: " + fileRef.getParent() );
     @Override
     public void delocalize() throws IOException {
         this.depositDirectoryOrFile(getAbsoluteFileRef(), file.toString());
-    }            fileRef = new File(getAbsoluteFileRef());
-    if (!new File(fileRef.getParent()).mkdirs()) {
-    	throw new IOException("Could not create local directory: " + fileRef.getParent() );
-    } else {
-    	LOG.info("Create local directory worked on second attempt");
     }
-} else {
-	LOG.error("Was able to create local directory: " + fileRef.getParent());
-    LOG.error("java.io.tmpdir = "+System.getProperty("java.io.tmpdir"));
-    LOG.error("this.dir = "+this.dir);
-    LOG.error("hadoop.tmp.dir = "+System.getProperty("hadoop.tmp.dir"));
-
 
     @Override
     public void setWorkingDir(String strDir ) {
