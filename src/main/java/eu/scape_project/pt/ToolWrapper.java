@@ -1,6 +1,7 @@
 package eu.scape_project.pt;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -95,7 +96,7 @@ public class ToolWrapper {
             // localize parameters
             for( Entry<String, String> entry : mapInputFileParameters.entrySet()) {
                 LOG.debug("input = " + entry.getValue());
-                String localFileRefs = localiseFileRefs(entry.getValue());
+                String localFileRefs = localiseFileRefs(entry.getValue(), true);
                 mapTempInputFileParameters.put( entry.getKey(), localFileRefs.substring(1));
             }
 
@@ -103,7 +104,7 @@ public class ToolWrapper {
                 new HashMap<String, String>(mapOutputFileParameters[c]);
             for( Entry<String, String> entry : mapOutputFileParameters[c].entrySet()) {
                 LOG.debug("output = " + entry.getValue());
-                String localFileRefs = localiseFileRefs(entry.getValue());
+                String localFileRefs = localiseFileRefs(entry.getValue(), false);
                 mapTempOutputFileParameters.put( entry.getKey(), localFileRefs.substring(1));
             }
 
@@ -146,19 +147,21 @@ public class ToolWrapper {
         return text;
     }
 
-    private static String localiseFileRefs(String localFile) throws IOException {
+    private static String localiseFileRefs(String localFile, boolean copy) throws IOException {
+    	LogFactory.getLog(ToolWrapper.class).debug("localiseFileRefs copy: "+copy+" localFile: "+localFile);
         String[] remoteFileRefs = localFile.split(SEP);
         StringBuilder localFileRefs = new StringBuilder();
         String workingDir = workingDir();
         for( int i = 0; i < remoteFileRefs.length; i++ ){
             Filer filer = Filer.create(remoteFileRefs[i]);
             filer.setWorkingDir(workingDir);
-            filer.localize();
+            //filer.localize();
+            filer.localize_(copy);
             localFileRefs.append(localFileRefs + SEP + filer.getRelativeFileRef());
         }
         return localFileRefs.toString();
     }
-
+    
     private static String convertToResult(OutputStream oStdout, final String strStdoutFile) {
         if( oStdout instanceof ByteArrayOutputStream )
             return  new String( ((ByteArrayOutputStream)oStdout).toByteArray() );

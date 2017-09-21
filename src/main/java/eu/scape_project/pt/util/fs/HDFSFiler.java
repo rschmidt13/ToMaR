@@ -35,6 +35,8 @@ public class HDFSFiler extends Filer {
      * File to handle by this filer
      */
     private final Path file;
+    
+    private boolean copy;
 
     HDFSFiler(URI uri) throws IOException {
         this.file = new Path(uri);
@@ -81,7 +83,12 @@ public class HDFSFiler extends Filer {
         LOG.debug("local file name is: "+src+" destination path is:" +dest);
         hdfs.copyFromLocalFile(src, dest);
     }
-
+    
+    public void localize_(boolean copy) throws IOException {
+    	this.copy = copy;
+    	localize();
+    }
+    
     @Override
     public void localize() throws IOException {
         File fileRef = new File(getAbsoluteFileRef());
@@ -90,7 +97,7 @@ public class HDFSFiler extends Filer {
             throw new IOException("Could not create local directory: " + fileRef.getParent() );
         }
         Path localfile = new Path( fileRef.toString() );
-        if(hdfs.exists(file)) {
+        if(hdfs.exists(file) && copy) {
             if( LOG.isDebugEnabled() ) {
                 FileStatus fs = hdfs.getFileStatus(file);
                 if( !fs.isDirectory() ) {

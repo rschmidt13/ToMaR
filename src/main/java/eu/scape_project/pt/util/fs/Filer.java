@@ -48,6 +48,7 @@ public abstract class Filer {
     /**
      * Copies file or directory to local filesystem.
      */
+    public abstract void localize_(boolean copy) throws IOException;
     public abstract void localize() throws IOException;
 
     /**

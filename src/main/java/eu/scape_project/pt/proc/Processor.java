@@ -10,7 +10,7 @@ import org.apache.commons.logging.LogFactory;
 public abstract class Processor implements Runnable {
 
     private static Log LOG = LogFactory.getLog(ToolProcessor.class);
-    public static int EXECUTION_TIMEOUT_MINUTES = 10;
+    public static int EXECUTION_TIMEOUT_MINUTES = 1;
 
     
     protected char debugToken = 'P';
